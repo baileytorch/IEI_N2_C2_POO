@@ -1,0 +1,5 @@
+INSERT INTO generos (genero,descripcion) VALUES
+('Narrativo','Relata una historia en la cual aparecen ciertos personajes en un tiempo y espacio determinados. Las descripciones son un punto central en este género, así como los diálogos y monólogos.'),
+('Lírico','Transmite sentimientos y emociones a través de la voz lírica, ya sea en verso o en prosa, así mismo presenta la realidad desde su propia perspectiva.'),
+('Dramático','También llamado teatral, se caracteriza por contener obras con situaciones y conflictos en las que se hace uso del diálogo, con el propósito de que sean representadas en un escenario frente al público.'),
+('Didáctico','El género didáctico es de reciente aparición, en este se presenta un tema, se expresa una opinión o se divulgan enseñanzas e ideas con respecto a ese tema.')
