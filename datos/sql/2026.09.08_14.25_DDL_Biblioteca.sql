@@ -1,5 +1,15 @@
 CREATE DATABASE iei_n2_c2;
 
+CREATE TABLE parametros(
+    id_parametro INTEGER AUTO_INCREMENT,
+    codigo VARCHAR(20) NOT NULL,
+    parametro VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100) NULL,
+    habilitado TINYINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT pk_parametros PRIMARY KEY (id_parametro)
+) COMMENT = 'Parámetros de sistema. Géneros y categorías de lectores, idiomas de publicación, géneros y subgéneros literarios, tipos de usuario';
+
 CREATE TABLE estados(
     id_estado INTEGER AUTO_INCREMENT,
     estado VARCHAR(20) NOT NULL,
@@ -49,7 +59,7 @@ CREATE TABLE tipos_direccion(
 
 CREATE TABLE direcciones(
     id_direccion INTEGER AUTO_INCREMENT,
-    tipo_direccion INTEGER NOT NULL,
+    parametro INTEGER NOT NULL,
     comuna INTEGER NULL,
     calle VARCHAR(50) NOT NULL,
     numero VARCHAR(5) NULL,
@@ -57,7 +67,7 @@ CREATE TABLE direcciones(
     habilitado TINYINT NOT NULL DEFAULT 1,
 
     CONSTRAINT pk_direcciones PRIMARY KEY (id_direccion),
-    CONSTRAINT fk_direcciones_tipos_direccion FOREIGN KEY (tipo_direccion) REFERENCES tipos_direccion(id_tipo_direccion),
+    CONSTRAINT fk_direcciones_parametros FOREIGN KEY (parametro) REFERENCES parametros(id_parametro),
     CONSTRAINT fk_direcciones_comunas FOREIGN KEY (comuna) REFERENCES comunas(id_comuna)
 ) COMMENT = 'Tabla de direcciones para asociar a editoriales y personas';
 
@@ -87,14 +97,6 @@ CREATE TABLE editoriales(
     CONSTRAINT fk_editoriales_direcciones FOREIGN KEY (direccion) REFERENCES direcciones(id_direccion)
 ) COMMENT = 'Tabla de casas editoriales de libros, asociadas a libros mediante publicacio';
 
-CREATE TABLE idiomas(
-    id_idioma INTEGER AUTO_INCREMENT,
-    idioma VARCHAR(20) NOT NULL,
-    habilitado TINYINT NOT NULL DEFAULT 1,
-
-    CONSTRAINT pk_idiomas PRIMARY KEY (id_idioma)
-) COMMENT = 'Tabla de idiomas de publicación';
-
 CREATE TABLE autores(
     id_autor INTEGER AUTO_INCREMENT,
     pais INTEGER NULL,
@@ -108,15 +110,6 @@ CREATE TABLE autores(
     CONSTRAINT fk_autores_paises FOREIGN KEY (pais) REFERENCES paises(id_pais)
 ) COMMENT = 'Tabla de autores de libros';
 
-CREATE TABLE generos(
-    id_genero INTEGER AUTO_INCREMENT,
-    genero VARCHAR(20) NOT NULL,
-    descripcion VARCHAR(100) NULL,
-    habilitado TINYINT NOT NULL DEFAULT 1,
-
-    CONSTRAINT pk_generos PRIMARY KEY (id_genero)
-) COMMENT = 'Tabla de generos literarios de libros';
-
 CREATE TABLE publicaciones(
     id_publicacion INTEGER AUTO_INCREMENT,
     editorial INTEGER NULL,
@@ -128,13 +121,13 @@ CREATE TABLE publicaciones(
 
     CONSTRAINT pk_publicaciones PRIMARY KEY (id_publicacion),
     CONSTRAINT fk_publicaciones_editoriales FOREIGN KEY (editorial) REFERENCES editoriales(id_editorial),
-    CONSTRAINT fk_publicaciones_idiomas FOREIGN KEY (idioma) REFERENCES idiomas(id_idioma)
-) COMMENT = 'Tabla de publicaciones de libros';
+    CONSTRAINT fk_publicaciones_parametros FOREIGN KEY (idioma) REFERENCES parametros(id_parametro)
+) COMMENT = 'Tabla de publicaciones de libros por editorial';
 
 CREATE TABLE libros(
     id_libro INTEGER AUTO_INCREMENT,
     autor INTEGER NOT NULL,
-    genero INTEGER NOT NULL,
+    subgenero INTEGER NOT NULL,
     publicacion INTEGER NOT NULL,
     biblioteca INTEGER NOT NULL,
     titulo VARCHAR(100) NULL,
@@ -143,7 +136,86 @@ CREATE TABLE libros(
 
     CONSTRAINT pk_libros PRIMARY KEY (id_libro),
     CONSTRAINT fk_libros_autores FOREIGN KEY (autor) REFERENCES autores(id_autor),
-    CONSTRAINT fk_libros_generos FOREIGN KEY (genero) REFERENCES generos(id_genero),
+    CONSTRAINT fk_libros_parametros FOREIGN KEY (subgenero) REFERENCES parametros(id_parametro),
     CONSTRAINT fk_libros_publicaciones FOREIGN KEY (publicacion) REFERENCES publicaciones(id_publicacion),
     CONSTRAINT fk_libros_bibliotecas FOREIGN KEY (biblioteca) REFERENCES bibliotecas(id_biblioteca)
 ) COMMENT = 'Tabla de libros';
+
+CREATE TABLE usuarios(
+    id_usuario INTEGER AUTO_INCREMENT,
+    rut VARCHAR(11) NULL,
+    nombre VARCHAR(25) NOT NULL,
+    apellido VARCHAR(25) NOT NULL,
+    correo VARCHAR(255) NOT NULL,
+    pais INTEGER NULL,
+    fecha_nacimiento DATE NULL,
+    genero INTEGER NOT NULL,
+    fecha_incorporacion DATE NOT NULL,
+    habilitado TINYINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT pk_usuarios PRIMARY KEY (id_usuario),
+    CONSTRAINT fk_usuarios_paises FOREIGN KEY (pais) REFERENCES paises(id_pais)
+) COMMENT = 'Tabla de usuarios de sistema. Administradores de bibliotecas y lectores';
+
+CREATE TABLE direcciones_usuarios(
+    id_direccion_usuario INTEGER AUTO_INCREMENT,
+    direccion INTEGER NOT NULL,
+    usuario INTEGER NOT NULL,
+    habilitado TINYINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT pk_direccionesusuarios PRIMARY KEY (id_direccion_usuario),
+    CONSTRAINT fk_direccionesusuarios_direcciones FOREIGN KEY (direccion) REFERENCES direcciones(id_direccion),
+    CONSTRAINT fk_direccionesusuarios_usuarios FOREIGN KEY (usuario) REFERENCES usuarios(id_usuario)
+) COMMENT = 'Tabla auxiliar de direcciones de usuarios';
+
+CREATE TABLE bibliotecarios(
+    id_bibliotecario INTEGER AUTO_INCREMENT,
+    usuario INTEGER NOT NULL,
+    tipo_usuario INTEGER NOT NULL,
+    contrasena CHAR(60) NOT NULL,
+    habilitado TINYINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT pk_bibliotecarios PRIMARY KEY (id_bibliotecario),
+    CONSTRAINT fk_bibliotecarios_usuarios FOREIGN KEY (usuario) REFERENCES usuarios(id_usuario),
+    CONSTRAINT fk_bibliotecarios_parametros FOREIGN KEY (tipo_usuario) REFERENCES parametros(id_parametro)
+) COMMENT = 'Tabla de usuarios de tipo bibliotecario, gestionan libros, lectores y préstamos de la bilioteca';
+
+CREATE TABLE lectores(
+    id_lector INTEGER AUTO_INCREMENT,
+    usuario INTEGER NOT NULL,
+    categoria INTEGER NOT NULL,
+    habilitado TINYINT NOT NULL DEFAULT 1,
+
+    CONSTRAINT pk_lectores PRIMARY KEY (id_lector),
+    CONSTRAINT fk_lectores_usuarios FOREIGN KEY (usuario) REFERENCES usuarios(id_usuario),
+    CONSTRAINT fk_lectores_parametros FOREIGN KEY (categoria) REFERENCES parametros(id_parametro)
+) COMMENT = 'Tabla de usuarios de tipo lector, pueden solicitar libros de la bilioteca';
+
+CREATE TABLE inventarios(
+    id_inventario INTEGER AUTO_INCREMENT,
+    libro INTEGER NOT NULL,
+    estado INTEGER NOT NULL,
+    ubicacion INTEGER NOT NULL,
+    
+    CONSTRAINT pk_inventarios PRIMARY KEY (id_inventario),
+    CONSTRAINT fk_inventarios_libros FOREIGN KEY (libro) REFERENCES libros(id_libro),
+    CONSTRAINT fk_inventarios_estados FOREIGN KEY (estado) REFERENCES estados(id_estado),
+    CONSTRAINT fk_inventarios_ubicaciones FOREIGN KEY (ubicacion) REFERENCES ubicaciones(id_ubicacion)
+) COMMENT = 'Registro de libros y ubicaciones';
+
+CREATE TABLE prestamos(
+    id_prestamo INTEGER AUTO_INCREMENT,
+    libro INTEGER NOT NULL,
+    lector INTEGER NOT NULL,
+    fecha_prestamo DATETIME NOT NULL DEFAULT NOW(),
+    fecha_devolucion DATETIME NOT NULL,
+    fecha_retorno DATETIME NULL,
+    
+    CONSTRAINT pk_prestamos PRIMARY KEY (id_prestamo),
+    CONSTRAINT fk_prestamos_libros FOREIGN KEY (libro) REFERENCES inventarios(id_inventario),
+    CONSTRAINT fk_prestamos_lectores FOREIGN KEY (lector) REFERENCES lectores(id_lector)
+) COMMENT = 'Registro de préstamos y devoluciones de libros.';
+
+ALTER TABLE usuarios ADD UNIQUE(rut);
+ALTER TABLE usuarios ADD UNIQUE(correo);
+ALTER TABLE usuarios ADD CONSTRAINT correo_unico UNIQUE (correo);

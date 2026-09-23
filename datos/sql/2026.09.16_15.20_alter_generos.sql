@@ -1,1 +1,0 @@
-ALTER TABLE generos MODIFY descripcion VARCHAR(255);
