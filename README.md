@@ -1,4 +1,6 @@
 # IEI_N2_C2_POO
+
+CREATE USER 'iei-n2-c2'@'%' IDENTIFIED BY 'iein2c2';
 ___
 Desarrollo Modular Proyecto POO
 
@@ -28,28 +30,16 @@ Para usar las herramientas de automatización de peewee necesitamos crear un usu
 ```
 CREATE USER 'Usuario'@'localhost' IDENTIFIED BY 'mypassword';
 ```
+* Conceder privilegios para una base de datos específica al usuario 'Usuario' local  (por ejemplo, 'mydatabase')
+```
+GRANT ALL PRIVILEGES ON mydatabase.* TO 'Usuario'@'localhost';
+```
 
 * Crear usuario remoto 'Usuario' con contraseña 'mypassword'
 ```
 CREATE USER 'Usuario'@'%' IDENTIFIED BY 'mypassword';
 ```
-
-* Conceder privilegios al usuario 'Usuario' local para todas las bases de datos y tablas
-```
-GRANT ALL PRIVILEGES ON *.* TO 'Usuario'@'localhost' WITH GRANT OPTION;
-```
-
-* Conceder privilegios al usuario 'Usuario' global para todas las bases de datos y tablas
-```
-GRANT ALL PRIVILEGES ON *.* TO 'Usuario'@'%' WITH GRANT OPTION;
-```
-
-* Conceder privilegios para una base de datos específica aal usuario 'Usuario' local  (por ejemplo, 'mydatabase')
-```
-GRANT ALL PRIVILEGES ON mydatabase.* TO 'Usuario'@'localhost';
-```
-
-* Conceder privilegios para una base de datos específica aal usuario 'Usuario' global  (por ejemplo, 'mydatabase')
+* Conceder privilegios para una base de datos específica al usuario remoto 'Usuario' (por ejemplo, 'mydatabase')
 ```
 GRANT ALL PRIVILEGES ON mydatabase.* TO 'Usuario'@'%';
 ```
