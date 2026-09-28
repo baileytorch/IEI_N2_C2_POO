@@ -47,4 +47,20 @@ Ejecutaremos el siguiente comando mediante nuestro terminal:
 python -m pwiz -e mysql -H localhost -p 3306 -u your_username -P your_database_name > models.py
 ```
 ___
-*ORM* Object Relational Mapping. Estas librerías se encargan de ofrecer clases y métodos para que podamos manipular la base de datos usando programación orientada a objetos.
+- ORM: Para comunicarnos con la DB usaremos un ORM (*Object Relational Mapping*), que se encargará de entender los objetos (por el lado del código) y las entidades (por el lado de la base de datos). Usaremos SqlAlchemy, el que se instalará mediante la ejecución del siguiente comando en el terminal:
+
+    | Código |          | Base de datos |
+    | -------- | -------- | -------- |
+    | Clase | <------> | Entidad |
+    | objeto | <------> | registro |
+
+___   
+> Para poder mantener las librerias actualizadas y estandarizadas para todo el equipo de desarrollo, crearemos un archivo de requerimientos con el siguiente comando:
+```
+pip freeze > requirements.txt
+```
+
+> Este archivo tendrá una lista de todas las librerías incluídas en nuestro *VENV*, la que podrá ser instalada en cualquier nuevo *VENV* ejecutando el siguiente comando:
+```
+pip install -r requirements.txt
+```
