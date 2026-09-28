@@ -26,6 +26,7 @@ pip install peewee pymysql
 - Pymysql es el driver que permitirá la conexión con la base de datos.
 
 Para usar las herramientas de automatización de peewee necesitamos crear un usuario con permisos y seguridad en nuestra base de datos.
+
 * Crear usuario local 'Usuario' con contraseña 'mypassword'
 ```
 CREATE USER 'Usuario'@'localhost' IDENTIFIED BY 'mypassword';
@@ -33,23 +34,15 @@ CREATE USER 'Usuario'@'localhost' IDENTIFIED BY 'mypassword';
 * Conceder privilegios para una base de datos específica al usuario 'Usuario' local  (por ejemplo, 'mydatabase')
 ```
 GRANT ALL PRIVILEGES ON mydatabase.* TO 'Usuario'@'localhost';
-```
-
-* Crear usuario remoto 'Usuario' con contraseña 'mypassword'
-```
-CREATE USER 'Usuario'@'%' IDENTIFIED BY 'mypassword';
-```
-* Conceder privilegios para una base de datos específica al usuario remoto 'Usuario' (por ejemplo, 'mydatabase')
-```
-GRANT ALL PRIVILEGES ON mydatabase.* TO 'Usuario'@'%';
-```
+```  
 
 * Aplicar los cambios de privilegios
 ```
 FLUSH PRIVILEGES;
 ```
 
-Creacion de modelo de forma automatica:
+Creacion de modelo de forma automatica.
+Ejecutaremos el siguiente comando mediante nuestro terminal:
 ```
 python -m pwiz -e mysql -H localhost -p 3306 -u your_username -P your_database_name > models.py
 ```
