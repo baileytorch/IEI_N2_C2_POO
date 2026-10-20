@@ -100,13 +100,13 @@ El archivo `requirements.txt` registra versiones de paquetes para que el proyect
 python -m pip freeze > requirements.txt
 ```
 
-En otro equipo o en un entorno virtual nuevo, instala los paquetes registrados con:
+En otro equipo instala los paquetes registrados con:
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-No es necesario ejecutar los comandos individuales y luego instalar el archivo `requirements.txt` en el mismo entorno; basta con uno de los dos métodos.
+No es necesario ejecutar los comandos individuales y luego instalar el archivo `requirements.txt`; basta con uno de los dos métodos.
 
 ## Preparación de MySQL
 
@@ -119,16 +119,19 @@ No es necesario ejecutar los comandos individuales y luego instalar el archivo `
 CREATE USER 'Usuario'@'localhost' IDENTIFIED BY 'micontraseña';
 ```
 
-
 * Conceder privilegios para mi base de datos específica al usuario local 'Usuario'  (por ejemplo, 'mibasedatos')
 ```
 GRANT ALL PRIVILEGES ON mibasedatos.* TO 'Usuario'@'localhost';
 ```
 
-
 * Aplicar los cambios de privilegios
 ```
 FLUSH PRIVILEGES;
+```
+
+* Será de gran utilidad crear el modelo de forma automatica, pero sólo lo usaremos como base para crear manualmente nuestros modelos, ya que la generación tiene caracteres que Python NO puede procesar:
+```
+python -m pwiz -e mysql -H localhost -p 3306 -u your_username -P your_database_name > models.py
 ```
 
 ## Configuración de conexión
