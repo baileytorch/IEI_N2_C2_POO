@@ -114,6 +114,23 @@ No es necesario ejecutar los comandos individuales y luego instalar el archivo `
 2. Selecciona tu DB como esquema activo y ejecuta las sentencias para crear las tablas.
 3. Crea un usuario y otorgale únicamente los permisos necesarios sobre tu DB (por ejemplo, `SELECT`, `INSERT`, `UPDATE` y `DELETE`). No uses la cuenta `root` desde la aplicación ni concedas privilegios globales para este ejercicio.
 
+* Crear usuario local 'Usuario' con contraseña 'micontraseña' (Usuario y contraseña debe definirlas Ud.)
+```
+CREATE USER 'Usuario'@'localhost' IDENTIFIED BY 'micontraseña';
+```
+
+
+* Conceder privilegios para mi base de datos específica al usuario local 'Usuario'  (por ejemplo, 'mibasedatos')
+```
+GRANT ALL PRIVILEGES ON mibasedatos.* TO 'Usuario'@'localhost';
+```
+
+
+* Aplicar los cambios de privilegios
+```
+FLUSH PRIVILEGES;
+```
+
 ## Configuración de conexión
 
 La conexión se configura mediante `python-decouple`. Crea un archivo llamado `.env` en la carpeta raíz del proyecto con los datos de tu instalación:
