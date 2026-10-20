@@ -9,3 +9,5 @@ def procesar_listado_paises(tabla:PrettyTable):
             for pais in lista_paises:
                 tabla.add_row([pais.id_pais, pais.pais, pais.nacionalidad, pais.iso2, pais.iso3])
             return tabla
+
+def crear_objeto_pais()

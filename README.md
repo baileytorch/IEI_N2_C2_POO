@@ -1,66 +1,141 @@
 # IEI_N2_C2_POO
 
-CREATE USER 'iei-n2-c2'@'%' IDENTIFIED BY 'iein2c2';
-___
-Desarrollo Modular Proyecto POO
+Proyecto didáctico de una aplicación de biblioteca desarrollado en Python. El objetivo es practicar programación orientada a objetos (POO), modularización, separación de responsabilidades y acceso a una base de datos MySQL mediante un ORM.
 
-El desarrollo modular de software es una técnica que divide un programa grande en partes más pequeñas e independientes llamadas módulos. Cada bloque cumple una función específica y se conecta con los demás mediante interfaces claras, lo que facilita crear sistemas ordenados, fáciles de probar y simples de actualizar.
+## Conceptos que trabajaremos
 
-## Principios Clave
-    - Módulos independientes: Bloques de código con una tarea única que funcionan por sí mismos.
-    - Alta cohesión: Cada parte hace una sola cosa y la hace muy bien.
-    - Bajo acoplamiento: Los módulos dependen poco el uno del otro, permitiendo cambios sin romper el sistema.
+### Programación orientada a objetos (POO)
 
-## Ventajas Principales
-    - Mantenimiento fácil: Los errores se buscan y arreglan rápido en una sola sección.
-    - Trabajo en equipo: Varios grupos pueden crear distintas partes al mismo tiempo.
-    - Reutilización: Las piezas sirven de nuevo en otros proyectos.
-    - Crecimiento simple: Se añaden funciones nuevas sin rediseñar todo el programa.
-___
+La POO organiza el programa alrededor de objetos: unidades que reúnen datos y operaciones relacionadas.
 
-* Instalación ORM + Driver de base de datos. Mediante terminal de VSCode o CMD ejecutaremos el siguiente comando:
-```
-pip install peewee pymysql
-```
-- Peewee es el ORM que utilizaremos para procesar los datos.
-- Pymysql es el driver que permitirá la conexión con la base de datos.
+| Concepto | Definición | Ejemplo en el proyecto |
+| --- | --- | --- |
+| Clase | Molde que define los datos y comportamientos de un tipo de objeto. | `Pais` define los campos de un país. |
+| Objeto | Instancia concreta creada a partir de una clase. | Un país obtenido desde la base de datos. |
+| Atributo | Dato asociado a una clase u objeto. | `id_pais`, `pais`, `nacionalidad`, `iso2`, `iso3` y `habilitado`. |
+| Método | Función asociada a una clase u objeto. | `save()` guarda un modelo de Peewee. |
+| Encapsulamiento | Agrupa y protege los detalles internos de una unidad, exponiendo operaciones claras. | Los módulos de datos concentran las consultas y el guardado. |
+| Abstracción | Permite usar una operación sin tener que conocer todos sus detalles internos. | El resto de la aplicación puede solicitar un listado sin construir SQL manualmente. |
+| Herencia | Permite crear una clase a partir de otra y reutilizar su comportamiento. | `Pais` hereda de `BaseModel`, que comparte la configuración de la base de datos. |
+| Polimorfismo | Permite usar una misma operación con objetos de distintos tipos, cada uno con su implementación. | Es un principio de POO que se puede aplicar al extender el sistema con distintos modelos. |
 
-Para usar las herramientas de automatización de peewee necesitamos crear un usuario con permisos y seguridad en nuestra base de datos.
+Estos conceptos se estudian y aplican progresivamente; no todas las clases del proyecto necesitan implementar todos los principios.
 
-* Crear usuario local 'Usuario' con contraseña 'mypassword'
-```
-CREATE USER 'Usuario'@'localhost' IDENTIFIED BY 'mypassword';
-```
-* Conceder privilegios para una base de datos específica al usuario 'Usuario' local  (por ejemplo, 'mydatabase')
-```
-GRANT ALL PRIVILEGES ON mydatabase.* TO 'Usuario'@'localhost';
-```  
+### Modularización
 
-* Aplicar los cambios de privilegios
-```
-FLUSH PRIVILEGES;
+Modularizar consiste en dividir el programa en módulos pequeños, cada uno con una responsabilidad definida. En Python, los archivos `.py` son módulos y las carpetas con `__init__.py` funcionan como paquetes.
+
+Una buena modularización busca:
+
+- **Alta cohesión:** las funciones de un módulo trabajan en una misma responsabilidad.
+- **Bajo acoplamiento:** un módulo depende lo menos posible de los detalles internos de otros.
+- **Interfaces claras:** los módulos se comunican mediante funciones y clases con propósitos reconocibles.
+
+Esto facilita entender, probar, mantener y ampliar el sistema sin tener que modificar toda la aplicación a la vez.
+
+### ORM
+
+Un ORM (*Object-Relational Mapper* o mapeador objeto-relacional) conecta el modelo de objetos del programa con las tablas relacionales de una base de datos. En este proyecto usamos **Peewee**.
+
+| En Python | En la base de datos |
+| --- | --- |
+| Clase de modelo, por ejemplo `Pais` | Tabla, por ejemplo `paises` |
+| Atributo/campo del modelo, por ejemplo `iso2` | Columna de la tabla |
+| Objeto `Pais` | Fila o registro |
+| Consulta del ORM | Consulta SQL construida por Peewee |
+
+El ORM reduce la necesidad de escribir SQL para cada operación y convierte los resultados en objetos que podemos usar desde Python. No reemplaza la base de datos ni elimina la necesidad de entender tablas, claves y relaciones.
+
+## Estructura del proyecto
+
+```text
+.
+├── app.py                         # Punto de entrada
+├── auxiliares/                    # Configuración y textos compartidos de la aplicación
+├── presentacion/                  # Menús, interacción con el usuario y salida por pantalla
+├── negocio/                       # Procesamiento y coordinación de reglas de negocio
+└── datos/
+    ├── conexion.py                # Configuración de la conexión MySQL
+    ├── modelos/                   # Modelos de Peewee
+    ├── repositorios/              # Consultas y operaciones de persistencia
+    └── sql/                       # Creación y carga de datos de la base de datos
 ```
 
-Creacion de modelo de forma automatica.
-Ejecutaremos el siguiente comando mediante nuestro terminal:
-```
-python -m pwiz -e mysql -H localhost -p 3306 -u your_username -P your_database_name > models.py
-```
-___
-- ORM: Para comunicarnos con la DB usaremos un ORM (*Object Relational Mapping*), que se encargará de entender los objetos (por el lado del código) y las entidades (por el lado de la base de datos). Usaremos SqlAlchemy, el que se instalará mediante la ejecución del siguiente comando en el terminal:
+La separación por capas permite ubicar cada responsabilidad:
 
-    | Código |          | Base de datos |
-    | -------- | -------- | -------- |
-    | Clase | <------> | Entidad |
-    | objeto | <------> | registro |
+1. **Presentación:** recibe opciones y datos de la persona usuaria y muestra resultados.
+2. **Negocio:** procesa la información y coordina las operaciones de la aplicación.
+3. **Datos:** contiene los modelos, repositorios y la conexión con MySQL.
 
-___   
-> Para poder mantener las librerias actualizadas y estandarizadas para todo el equipo de desarrollo, crearemos un archivo de requerimientos con el siguiente comando:
-```
-pip freeze > requirements.txt
+Por ejemplo, al listar países, la presentación solicita el listado, la capa de negocio prepara la tabla y el repositorio consulta los registros mediante el modelo `Pais`.
+
+## Requisitos
+
+- Python **3.12 o superior**.
+- MySQL Server en ejecución.
+- Acceso a un cliente MySQL, por ejemplo MySQL Workbench o el cliente de consola.
+
+## Instalación
+
+Instala las librerías que utiliza directamente la aplicación:
+
+| Librería | Uso | Comando |
+| --- | --- | --- |
+| Peewee | ORM y conexión de la aplicación con MySQL. | `python -m pip install peewee` |
+| PyMySQL | Driver de Python para conectarse a MySQL mediante Peewee. | `python -m pip install PyMySQL` |
+| python-decouple | Lee la configuración de conexión desde `.env`. | `python -m pip install python-decouple` |
+| PrettyTable | Presenta el listado de datos en formato de tabla. | `python -m pip install prettytable` |
+
+Para instalarlas en un solo paso, también puedes ejecutar:
+
+```powershell
+python -m pip install peewee PyMySQL python-decouple prettytable
 ```
 
-> Este archivo tendrá una lista de todas las librerías incluídas en nuestro *VENV*, la que podrá ser instalada en cualquier nuevo *VENV* ejecutando el siguiente comando:
+### Archivo `requirements.txt`
+
+El archivo `requirements.txt` registra versiones de paquetes para que el proyecto pueda instalarse de forma consistente en otro entorno. Una vez instaladas las dependencias necesarias, actualízalo cuando agregues o quites paquetes:
+
+```powershell
+python -m pip freeze > requirements.txt
 ```
-pip install -r requirements.txt
+
+En otro equipo o en un entorno virtual nuevo, instala los paquetes registrados con:
+
+```powershell
+python -m pip install -r requirements.txt
 ```
+
+No es necesario ejecutar los comandos individuales y luego instalar el archivo `requirements.txt` en el mismo entorno; basta con uno de los dos métodos.
+
+## Preparación de MySQL
+
+1. En MySQL Workbench o en el cliente de MySQL, ejecuta la instrucción  para crear la base de datos.
+2. Selecciona tu DB como esquema activo y ejecuta las sentencias para crear las tablas.
+3. Crea un usuario y otorgale únicamente los permisos necesarios sobre tu DB (por ejemplo, `SELECT`, `INSERT`, `UPDATE` y `DELETE`). No uses la cuenta `root` desde la aplicación ni concedas privilegios globales para este ejercicio.
+
+## Configuración de conexión
+
+La conexión se configura mediante `python-decouple`. Crea un archivo llamado `.env` en la carpeta raíz del proyecto con los datos de tu instalación:
+
+```dotenv
+db=iei_n2_c2
+host=localhost
+port=3306
+user=usuario_aplicacion
+password=<tu_clave_mysql>
+```
+
+Reemplaza `usuario_aplicacion` y el valor de `password` por las credenciales creadas. El archivo `.env` está excluido del control de versiones: no publiques ni compartas tus contraseñas. Cada integrante debe configurar sus propias credenciales localmente.
+
+## Ejecución
+
+La aplicación inicia el menú principal. La opción para listar países consulta la base de datos; por lo tanto, MySQL debe estar disponible y la tabla `paises` debe existir.
+
+## Convenciones de trabajo
+
+- Mantén cada función o clase en el módulo que corresponde a su responsabilidad.
+- Evita colocar consultas SQL o acceso a la base de datos en la capa de presentación.
+- Reutiliza los repositorios y modelos existentes al agregar operaciones.
+- Usa nombres claros para módulos, clases, funciones y variables.
+- No guardes contraseñas, credenciales ni otros datos sensibles en el código fuente.

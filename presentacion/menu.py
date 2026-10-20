@@ -1,6 +1,6 @@
 from auxiliares import nombre_app, version_app, menu_principal, diccionario_menu_principal
 import sys
-from presentacion.presentacion_pais import mostrar_listado_paises
+from presentacion.presentacion_pais import mostrar_listado_paises,modificar_pais
 
 def cargar_menu():
     print(f'\n{nombre_app} - {version_app}')
@@ -19,7 +19,7 @@ def cargar_menu():
             case '1':
                 mostrar_listado_paises()
             case '2':
-                print('Seleccionada Opción 2')
+                modificar_pais()
             case '3':
                 print('Seleccionada Opción 3')
             case '4':
