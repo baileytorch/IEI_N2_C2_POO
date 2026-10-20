@@ -1,6 +1,6 @@
 # IEI_N2_C2_POO
 
-Proyecto didáctico de una aplicación de biblioteca desarrollado en Python. El objetivo es practicar programación orientada a objetos (POO), modularización, separación de responsabilidades y acceso a una base de datos MySQL mediante un ORM.
+El objetivo de esta actividad es practicar programación orientada a objetos (POO), modularización, separación de responsabilidades y acceso a una base de datos MySQL mediante un ORM.
 
 ## Conceptos que trabajaremos
 

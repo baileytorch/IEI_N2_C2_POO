@@ -3,7 +3,7 @@ from auxiliares import mensaje_error
 
 def listado_paises():
     try:
-        paises = Pais.select()
+        paises = Pais.select().where(Pais.habilitado == True)
         if paises:
             return paises
     except Exception as error:
