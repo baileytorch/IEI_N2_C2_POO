@@ -17,26 +17,6 @@ def mostrar_menu(titulo, opciones):
     for clave, valor in opciones.items():
         print(f'[{clave}] - {valor}')
 
-
-def cargar_menu_configurar_parametros():
-    while True:
-        mostrar_menu(menu_configurar_parametros, diccionario_menu_configurar_parametros)
-        opcion = input('Seleccione su opción: ')
-        print()
-
-        match opcion:
-            case '1':
-                print('Seleccionada Opción 1')
-            case '2':
-                print('Seleccionada Opción 2')
-            case '3':
-                print('Seleccionada Opción 3')
-            case '0':
-                print('Volviendo al Menú Configuración Sistema...\n')
-                break
-            case _:
-                print(mensaje_error_opcion)
-
 def cargar_menu_paises():
     while True:
         mostrar_menu(menu_paises, diccionario_menu_paises)
@@ -54,6 +34,28 @@ def cargar_menu_paises():
                 eliminar_pais()
             case '0':
                 print('Volviendo al Menú Configurar Parámetros...\n')
+                break
+            case _:
+                print(mensaje_error_opcion)
+
+def cargar_menu_configurar_parametros():
+    while True:
+        mostrar_menu(
+            menu_configurar_parametros,
+            diccionario_menu_configurar_parametros
+        )
+        opcion = input('Seleccione su opción: ')
+        print()
+
+        match opcion:
+            case '1':
+                cargar_menu_paises()
+            case '2':
+                print('Seleccionada Opción 2')
+            case '3':
+                print('Seleccionada Opción 3')
+            case '0':
+                print('Volviendo al Menú Configuración Sistema...\n')
                 break
             case _:
                 print(mensaje_error_opcion)
@@ -79,7 +81,6 @@ def cargar_menu_configuracion():
             case _:
                 print(mensaje_error_opcion)
 
-
 def cargar_menu():
     print(f'\n{nombre_app} - {version_app}')
     print(f'{"=" * (len(nombre_app) + len(version_app) + 3)}\n')
@@ -91,9 +92,9 @@ def cargar_menu():
 
         match opcion:
             case '1':
-                mostrar_listado_paises()
+                print('Seleccionada Opción 1')
             case '2':
-                modificar_pais()
+                print('Seleccionada Opción 2')
             case '3':
                 print('Seleccionada Opción 3')
             case '4':
