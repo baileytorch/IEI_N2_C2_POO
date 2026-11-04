@@ -11,7 +11,7 @@ def listado_paises():
 
 def obtener_pais_nombre(nombre_pais):
     try:
-        pais = Pais.get(Pais.pais == nombre_pais)
+        pais = Pais.select().where(Pais.pais.contains(nombre_pais))
         if pais:
             return pais
     except Exception as error:

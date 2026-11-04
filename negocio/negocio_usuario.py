@@ -1,9 +1,12 @@
 from prettytable import PrettyTable
+
+from datetime import datetime
+import re
+
 from datos.repositorios.repositorio_usuario import listado_usuarios_habilitados, guardar_usuario
 from datos.repositorios.repositorio_pais import obtener_pais_id
 from datos.modelos.usuario import Usuario
 from auxiliares import mensaje_error
-from datetime import datetime
 
 
 def procesar_listado_usuarios(tabla: PrettyTable):
@@ -37,15 +40,15 @@ def procesar_listado_usuarios(tabla: PrettyTable):
             return tabla
 
 
-def crear_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, str_pais, str_fecha_nacimiento, str_genero, str_contrasenia):
+def crear_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, id_pais, fecha_nacimiento, str_genero, str_contrasenia):
     try:
         usuario = Usuario
         usuario.rut= str_rut
         usuario.nombre = str_nombre
         usuario.apellido = str_apellido
         usuario.correo = str_correo
-        usuario.pais = int(str_pais)
-        usuario.fecha_nacimiento = datetime.strptime(str_fecha_nacimiento, '%d/%m/%Y')
+        usuario.pais = id_pais
+        usuario.fecha_nacimiento = fecha_nacimiento
         usuario.genero = int(str_genero)
         usuario.password = str_contrasenia
         usuario.fecha_incorporacion = datetime.now()
@@ -55,18 +58,34 @@ def crear_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, str_pais
         print(f'{mensaje_error}{error}')
 
 
-def modificar_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, str_pais, str_fecha_nacimiento, str_genero, str_contrasenia, usuario: Usuario):
+def modificar_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, str_pais, fecha_nacimiento, int_genero, str_contrasenia, usuario: Usuario):
     try:
         if usuario.rut != str_rut and str_rut != '':
             usuario.rut = str_rut
-        # if pais.nacionalidad != nacionalidad and nacionalidad != '':
-        #     pais.nacionalidad = nacionalidad
-        # if pais.iso2 != iso2 and iso2 != '':
-        #     pais.iso2 = iso2
-        # if pais.iso3 != iso3 and iso3 != '':
-        #     pais.iso3 = iso3
-        # if pais.habilitado != habilitado:
-        #     pais.habilitado = habilitado
+        if usuario.nombre != str_nombre and str_nombre != '':
+            usuario.nombre = str_nombre
+        if usuario.apellido != str_apellido and str_apellido != '':
+            usuario.apellido = str_apellido
+        if usuario.correo != str_correo and str_correo != '':
+            usuario.correo = str_correo
+        if usuario.pais != str_pais and str_pais != '':
+            usuario.pais = str_pais
+        if usuario.fecha_nacimiento != fecha_nacimiento and fecha_nacimiento != '':
+            usuario.fecha_nacimiento = fecha_nacimiento
+        if usuario.genero != int_genero and int_genero != '':
+            usuario.genero = int_genero
+        if usuario.password != str_contrasenia and str_contrasenia != '':
+            usuario.password = str_contrasenia
+            
+        guardar_usuario(usuario)
+    except Exception as error:
+        print(f'{mensaje_error}{error}')
+
+
+def deshabilitar_objeto_usuario(usuario: Usuario):
+    try:
+        usuario.habilitado = False
+            
         guardar_usuario(usuario)
     except Exception as error:
         print(f'{mensaje_error}{error}')
