@@ -42,7 +42,7 @@ def procesar_listado_usuarios(tabla: PrettyTable):
 
 def crear_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, str_id_pais, fecha_nacimiento, str_genero, str_contrasenia):
     try:
-        usuario = Usuario
+        usuario = Usuario()
         usuario.rut= str_rut
         usuario.nombre = str_nombre
         usuario.apellido = str_apellido
