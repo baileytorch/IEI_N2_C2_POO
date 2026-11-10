@@ -11,11 +11,12 @@ def listado_paises():
 
 def obtener_pais_nombre(nombre_pais):
     try:
-        pais = Pais.select().where(Pais.pais.contains(nombre_pais))
-        if pais:
-            return pais
+        paises = Pais.select().where(Pais.pais.contains(nombre_pais))
+        if paises:
+            return paises
     except Exception as error:
         print(f'{mensaje_error}{error}')
+        return None
 
 def obtener_pais_id(id):
     try:

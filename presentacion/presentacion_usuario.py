@@ -1,11 +1,12 @@
 import re
 import bcrypt
+from prettytable import PrettyTable
 
 from datetime import datetime
 
 from negocio.negocio_usuario import crear_objeto_usuario
 from datos.repositorios.repositorio_pais import obtener_pais_nombre
-from auxiliares.validaciones import validar_contrasena,validar_correo,validar_fecha_nacimiento,validar_genero
+from auxiliares.validaciones import validar_contrasena,validar_correo,validar_fecha_nacimiento,validar_genero,validar_rut
 
 def crear_usuario():
     rut = nombre = apellido = correo = nombre_pais = fecha_nacimiento = genero = contrasenia = ''
@@ -15,6 +16,7 @@ def crear_usuario():
 
     while rut == '':
         rut = input('RUT (11.111.111-1): ')
+        rut = validar_rut(rut)
 
     while nombre == '':
         nombre = input('Nombre: ')
@@ -28,10 +30,17 @@ def crear_usuario():
 
     while nombre_pais == '':
         nombre_pais = input('País: ')
-        pais = obtener_pais_nombre(nombre_pais)
-        if not pais:
+        paises = obtener_pais_nombre(nombre_pais)
+        if not paises:
             print('País NO encontrado, ingrese nuevamente...')
             nombre_pais = ''
+        else:
+            tabla_paises = PrettyTable()
+            tabla_paises.field_names = ['Id','Pais','Nacionalidad']
+            for pais in paises:
+                tabla_paises.add_row([pais.id_pais,pais.pais,pais.nacionalidad])
+            print(tabla_paises)
+            id_pais = input('Id País: ')
 
     while fecha_nacimiento == '':
         fecha_nacimiento = input('Fecha de Nacimiento [dd/mm/aaaa]: ')
@@ -56,6 +65,6 @@ def crear_usuario():
                 print("-", error)
             contrasenia = ''
         else:
-            encriptado = bcrypt.hashpw(contrasenia, bcrypt.gensalt())
+            encriptado = bcrypt.hashpw(contrasenia.encode('utf-8'), bcrypt.gensalt())
 
-    crear_objeto_usuario(rut,nombre,apellido,correo,pais.id_pais,fecha_nacimiento,genero,encriptado)
+    crear_objeto_usuario(rut,nombre.title(),apellido.title(),correo,id_pais,fecha_nacimiento,genero,encriptado)

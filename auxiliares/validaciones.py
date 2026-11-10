@@ -48,4 +48,40 @@ def validar_genero(genero):
     else:
         print('Género Inválido, ingrese nuevamente...')
         return ''
+
+def validar_rut(rut):
+    patron_rut = r'^\d{1,3}(\.?\d{3})*-[0-9kK]$'
+    if re.match(patron_rut, rut):
+        rut_limpio = rut.replace('.', '').replace('-', '')
+        digito_verificador = rut_limpio[-1]
+        numero_rut = rut_limpio[:-1]
+        rut_invertido = numero_rut[::-1]
+        
+        multiplicador = 2
+        suma = 0
+        
+        for caracter in rut_invertido:
+            suma += int(caracter) * multiplicador
+            multiplicador += 1
+            if multiplicador > 7:
+                multiplicador = 2
+                
+        resto = suma % 11
+        digito_calculado = 11 - resto
+        
+        if digito_calculado == 11:
+            digito_calculado = '0'
+        elif digito_calculado == 10:
+            digito_calculado = 'K'
+        else:
+            digito_calculado = str(digito_calculado)
+        
+        if digito_calculado == digito_verificador:
+            return rut
+        else:
+            print('RUT Inválido, ingrese nuevamente...')
+            return ''
+    else:
+        print('Formato de RUT Inválido, ingrese nuevamente...')
+        return ''
         

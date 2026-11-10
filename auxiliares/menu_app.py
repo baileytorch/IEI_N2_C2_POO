@@ -13,6 +13,7 @@ diccionario_menu_biblioteca = {
     '1':'Registrar Biblioteca',
     '2':'Actualizar Biblioteca',
     '3':'Eliminar Biblioteca',
+    '4':'Gestionar Usuarios',
     '0':'Volver a Menú Principal\n'
 }
 

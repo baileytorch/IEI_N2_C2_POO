@@ -3,12 +3,13 @@ from auxiliares import (
     version_app,
     mensaje_error_opcion,
     menu_principal, diccionario_menu_principal,
+    menu_biblioteca, diccionario_menu_biblioteca,
     menu_configuracion, diccionario_menu_configuracion,
     menu_configurar_parametros, diccionario_menu_configurar_parametros,
     menu_paises, diccionario_menu_paises
 )
 from presentacion.presentacion_pais import mostrar_listado_paises, crear_pais, modificar_pais, eliminar_pais
-
+from presentacion.presentacion_usuario import crear_usuario
 
 def mostrar_menu(titulo, opciones):
     print(titulo)
@@ -16,6 +17,27 @@ def mostrar_menu(titulo, opciones):
 
     for clave, valor in opciones.items():
         print(f'[{clave}] - {valor}')
+
+def cargar_menu_biblioteca():
+    while True:
+        mostrar_menu(menu_biblioteca, diccionario_menu_biblioteca)
+        opcion = input('Seleccione su opción: ')
+        print()
+        
+        match opcion:
+            case '1':
+                pass
+            case '2':
+                pass
+            case '3':
+                pass
+            case '4':
+                crear_usuario()
+            case '0':
+                print('Volviendo al Menú Configurar Parámetros...\n')
+                break
+            case _:
+                print(mensaje_error_opcion)
 
 def cargar_menu_paises():
     while True:
