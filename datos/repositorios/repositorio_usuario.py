@@ -1,9 +1,12 @@
 from datos.modelos.usuario import Usuario
+from datos.modelos.pais import Pais
 from auxiliares import mensaje_error
 
 def listado_usuarios_habilitados():
     try:
-        usuarios = Usuario.select().where(Usuario.habilitado == True)
+        usuarios = Usuario.select().join(Pais).where(
+            (Usuario.pais == Pais.id_pais) and
+            (Usuario.habilitado == True))
         if usuarios:
             return usuarios
     except Exception as error:

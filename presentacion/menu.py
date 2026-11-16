@@ -6,10 +6,11 @@ from auxiliares import (
     menu_biblioteca, diccionario_menu_biblioteca,
     menu_configuracion, diccionario_menu_configuracion,
     menu_configurar_parametros, diccionario_menu_configurar_parametros,
-    menu_paises, diccionario_menu_paises
+    menu_paises, diccionario_menu_paises,
+    menu_usuarios,diccionario_menu_usuarios
 )
 from presentacion.presentacion_pais import mostrar_listado_paises, crear_pais, modificar_pais, eliminar_pais
-from presentacion.presentacion_usuario import crear_usuario
+from presentacion.presentacion_usuario import mostrar_listado_usuarios,crear_usuario,modificar_usuario
 
 def mostrar_menu(titulo, opciones):
     print(titulo)
@@ -32,9 +33,9 @@ def cargar_menu_biblioteca():
             case '3':
                 pass
             case '4':
-                crear_usuario()
+                cargar_menu_usuarios()
             case '0':
-                print('Volviendo al Menú Configurar Parámetros...\n')
+                print('Volviendo a Gestión Configurar Parámetros...\n')
                 break
             case _:
                 print(mensaje_error_opcion)
@@ -55,7 +56,28 @@ def cargar_menu_paises():
             case '4':
                 eliminar_pais()
             case '0':
-                print('Volviendo al Menú Configurar Parámetros...\n')
+                print('Volviendo a Gestión Configurar Parámetros...\n')
+                break
+            case _:
+                print(mensaje_error_opcion)
+
+def cargar_menu_usuarios():
+    while True:
+        mostrar_menu(menu_usuarios, diccionario_menu_usuarios)
+        opcion = input('Seleccione su opción: ')
+        print()
+
+        match opcion:
+            case '1':
+                mostrar_listado_usuarios()
+            case '2':
+                crear_usuario()
+            case '3':
+                modificar_usuario()
+            case '4':
+                pass
+            case '0':
+                print('Volviendo a Gestión Biblioteca...\n')
                 break
             case _:
                 print(mensaje_error_opcion)
@@ -77,7 +99,7 @@ def cargar_menu_configurar_parametros():
             case '3':
                 print('Seleccionada Opción 3')
             case '0':
-                print('Volviendo al Menú Configuración Sistema...\n')
+                print('Volviendo a Gestión Configuración Sistema...\n')
                 break
             case _:
                 print(mensaje_error_opcion)
@@ -98,7 +120,7 @@ def cargar_menu_configuracion():
             case '4':
                 print('Seleccionada Opción 4')
             case '0':
-                print('Volviendo al Menú Principal...\n')
+                print('Volviendo a Gestión Principal...\n')
                 break
             case _:
                 print(mensaje_error_opcion)
@@ -114,7 +136,7 @@ def cargar_menu():
 
         match opcion:
             case '1':
-                print('Seleccionada Opción 1')
+                cargar_menu_biblioteca()
             case '2':
                 print('Seleccionada Opción 2')
             case '3':

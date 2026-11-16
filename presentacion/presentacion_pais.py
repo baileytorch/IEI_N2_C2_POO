@@ -1,4 +1,5 @@
 from prettytable import PrettyTable
+
 from auxiliares import mensaje_error
 from negocio import procesar_listado_paises
 from datos import obtener_pais_nombre

@@ -1,6 +1,7 @@
-from peewee import Model,AutoField,CharField,IntegerField,SQL,DateField
+from peewee import Model,AutoField,CharField,IntegerField,SQL,DateField,ForeignKeyField
 from datos.conexion import conectar
 from auxiliares.datos_app import defecto
+from datos.modelos.pais import Pais
 
 base_datos = conectar()
 
@@ -14,7 +15,7 @@ class Usuario(BaseModel):
     nombre = CharField(max_length=25, null=False)
     apellido = CharField(max_length=25, null=False)
     correo = CharField(max_length=191)
-    pais = IntegerField(index=True)
+    pais = ForeignKeyField(model=Pais, column_name='pais', field='id_pais')
     fecha_nacimiento = DateField()
     genero = IntegerField(null=False)
     fecha_incorporacion = DateField(null=False)

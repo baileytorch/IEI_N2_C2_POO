@@ -13,4 +13,5 @@ from auxiliares.menu_app import (
     menu_datos_iniciales, diccionario_menu_datos_iniciales,
     menu_informacion_aplicacion, diccionario_menu_informacion_aplicacion,
     menu_configurar_parametros, diccionario_menu_configurar_parametros,
-    menu_paises, diccionario_menu_paises)
+    menu_paises, diccionario_menu_paises,
+    menu_usuarios,diccionario_menu_usuarios)

@@ -18,36 +18,43 @@ def validar_contrasena(contrasena):
 
     if not any(c in "!@#$%&/" for c in contrasena):
         errores.append("La contraseña debe contener al menos uno de los siguientes caracteres especiales: !, @, #, $, %, &. /.")
+    
+    if len(errores) > 0:
+        contrasena = ''
 
-    return errores
+    return contrasena, errores
 
 def validar_correo(correo):
     patron_correo = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if re.match(patron_correo, correo):
-        return correo
+        mensaje = 'Formato de correo válido\n'
     else:
-        print('Correo Inválido, ingrese nuevamente...')
-        return ''
+        mensaje = 'Correo Inválido, ingrese nuevamente...\n'
+        correo = ''
+    return correo, mensaje
 
 def validar_fecha_nacimiento(fecha_nacimiento):
     patron_fecha_nacimiento = r'^\b(0[1-9]|[12]\d|3[01])[/](0[1-9]|1[0-2])[/](19\d\d|20\d\d)\b$'
     if re.match(patron_fecha_nacimiento, fecha_nacimiento):
         try:
             fecha_nacimiento = datetime.strptime(fecha_nacimiento, '%d/%m/%Y')
-            return fecha_nacimiento
+            mensaje = 'Formato de fecha correcto'
         except ValueError:
-            print('Fecha Inválida, ingrese nuevamente...')
-            return ''
+            mensaje = 'Fecha Inválida, ingrese nuevamente...\n'
+            fecha_nacimiento = ''
     else:
-        print('Fecha Inválida, ingrese nuevamente...')
-        return ''
+        mensaje = 'Fecha Inválida, ingrese nuevamente...\n'
+        fecha_nacimiento = ''
+    
+    return fecha_nacimiento, mensaje
 
 def validar_genero(genero):
     if genero in ['1','2','3']:
-        return genero
+        mensaje = 'Género válido\n'
     else:
-        print('Género Inválido, ingrese nuevamente...')
-        return ''
+        mensaje = 'Género Inválido, ingrese nuevamente...\n'
+        genero = ''
+    return genero, mensaje
 
 def validar_rut(rut):
     patron_rut = r'^\d{1,3}(\.?\d{3})*-[0-9kK]$'
@@ -77,11 +84,12 @@ def validar_rut(rut):
             digito_calculado = str(digito_calculado)
         
         if digito_calculado == digito_verificador:
-            return rut
+            mensaje = 'RUT válido\n'
         else:
-            print('RUT Inválido, ingrese nuevamente...')
-            return ''
+            mensaje = 'RUT Inválido, ingrese nuevamente...\n'
+            rut = ''
     else:
-        print('Formato de RUT Inválido, ingrese nuevamente...')
-        return ''
+        mensaje = 'Formato de RUT Inválido, ingrese nuevamente...\n'
+        rut = ''
+    return rut, mensaje
         

@@ -79,3 +79,12 @@ diccionario_menu_paises = {
     '4':'Eliminar País',
     '0':'Volver a Menú Configurar Parámetros\n'
 }
+
+menu_usuarios = 'Gestión Usuarios'
+diccionario_menu_usuarios = {
+    '1':'Listado Usuarios',
+    '2':'Registrar Usuario',
+    '3':'Actualizar Usuario',
+    '4':'Eliminar Usuario',
+    '0':'Volver a Menú Configurar Parámetros\n'
+}
