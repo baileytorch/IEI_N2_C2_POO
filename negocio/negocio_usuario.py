@@ -3,8 +3,7 @@ from prettytable import PrettyTable
 from datetime import datetime
 import re
 
-from datos.repositorios.repositorio_usuario import listado_usuarios_habilitados, guardar_usuario
-from datos.repositorios.repositorio_pais import obtener_pais_id
+from datos.repositorios.repositorio_usuario import listado_usuarios_habilitados, guardar_usuario,obtener_usuario_rut
 from datos.modelos.usuario import Usuario
 from auxiliares import mensaje_error
 
@@ -72,7 +71,7 @@ def modificar_objeto_usuario(str_rut, str_nombre, str_apellido, str_correo, str_
             usuario.pais = int(str_pais)
         if usuario.fecha_nacimiento != fecha_nacimiento and fecha_nacimiento != '':
             usuario.fecha_nacimiento = fecha_nacimiento
-        if usuario.genero != int(str_genero) and str_genero != '':            
+        if str_genero != '' and usuario.genero != int(str_genero):
             usuario.genero = int(str_genero)
             
         guardar_usuario(usuario)
@@ -85,5 +84,13 @@ def deshabilitar_objeto_usuario(usuario: Usuario):
         usuario.habilitado = False
             
         guardar_usuario(usuario)
+    except Exception as error:
+        print(f'{mensaje_error}{error}')
+        
+def usuario_por_rut(rut):
+    try:
+        usuario = obtener_usuario_rut(rut)
+        if usuario:
+            return usuario
     except Exception as error:
         print(f'{mensaje_error}{error}')

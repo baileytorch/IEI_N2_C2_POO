@@ -9,6 +9,14 @@ def listado_paises():
     except Exception as error:
         print(f'{mensaje_error}{error}')
 
+def buscar_paises(nombre_pais):
+    try:
+        paises = Pais.select().where(Pais.pais.contains(nombre_pais) and (Pais.habilitado == True))
+        if paises:
+            return paises
+    except Exception as error:
+        print(f'{mensaje_error}{error}')
+
 def obtener_pais_nombre(nombre_pais):
     try:
         paises = Pais.select().where(Pais.pais.contains(nombre_pais))

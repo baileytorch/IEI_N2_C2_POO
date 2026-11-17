@@ -15,3 +15,11 @@ from auxiliares.menu_app import (
     menu_configurar_parametros, diccionario_menu_configurar_parametros,
     menu_paises, diccionario_menu_paises,
     menu_usuarios,diccionario_menu_usuarios)
+from auxiliares.validaciones import (
+    validar_rut,
+    validar_largo_string,
+    validar_correo,
+    validar_fecha_nacimiento,
+    validar_genero,
+    validar_contrasena
+)

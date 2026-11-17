@@ -14,7 +14,9 @@ def listado_usuarios_habilitados():
 
 def listado_usuarios_deshabilitados():
     try:
-        usuarios = Usuario.select().where(Usuario.habilitado == False)
+        usuarios = Usuario.select().join(Pais).where(
+            (Usuario.pais == Pais.id_pais) and
+            (Usuario.habilitado == False))
         if usuarios:
             return usuarios
     except Exception as error:
@@ -22,7 +24,8 @@ def listado_usuarios_deshabilitados():
 
 def listado_usuarios():
     try:
-        usuarios = Usuario.select()
+        usuarios = Usuario.select().join(Pais).where(
+            Usuario.pais == Pais.id_pais)
         if usuarios:
             return usuarios
     except Exception as error:
@@ -30,7 +33,8 @@ def listado_usuarios():
 
 def obtener_usuario_rut(rut_usuario):
     try:
-        usuario = Usuario.get(Usuario.rut == rut_usuario)
+        usuario = Usuario.select().where(Usuario.rut == rut_usuario).join(Pais).where(
+            Usuario.pais == Pais.id_pais).first()
         if usuario:
             return usuario
     except Exception as error:
