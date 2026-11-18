@@ -4,9 +4,7 @@ from auxiliares import mensaje_error
 
 def listado_usuarios_habilitados():
     try:
-        usuarios = Usuario.select().join(Pais).where(
-            (Usuario.pais == Pais.id_pais) and
-            (Usuario.habilitado == True))
+        usuarios = Usuario.select().join(Pais).where(Usuario.habilitado == True)
         if usuarios:
             return usuarios
     except Exception as error:
@@ -14,9 +12,7 @@ def listado_usuarios_habilitados():
 
 def listado_usuarios_deshabilitados():
     try:
-        usuarios = Usuario.select().join(Pais).where(
-            (Usuario.pais == Pais.id_pais) and
-            (Usuario.habilitado == False))
+        usuarios = Usuario.select().join(Pais).where(Usuario.habilitado == False)
         if usuarios:
             return usuarios
     except Exception as error:
@@ -24,8 +20,7 @@ def listado_usuarios_deshabilitados():
 
 def listado_usuarios():
     try:
-        usuarios = Usuario.select().join(Pais).where(
-            Usuario.pais == Pais.id_pais)
+        usuarios = Usuario.select().join(Pais)
         if usuarios:
             return usuarios
     except Exception as error:
@@ -33,8 +28,15 @@ def listado_usuarios():
 
 def obtener_usuario_rut(rut_usuario):
     try:
-        usuario = Usuario.select().where(Usuario.rut == rut_usuario).join(Pais).where(
-            Usuario.pais == Pais.id_pais).first()
+        usuario = Usuario.select().join(Pais).where(Usuario.rut == rut_usuario).first()
+        if usuario:
+            return usuario
+    except Exception as error:
+        print(f'{mensaje_error}{error}')
+
+def obtener_usuario_correo(correo_usuario):
+    try:
+        usuario = Usuario.select().join(Pais).where(Usuario.correo == correo_usuario).first()
         if usuario:
             return usuario
     except Exception as error:

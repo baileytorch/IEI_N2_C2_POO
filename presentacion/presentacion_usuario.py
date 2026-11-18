@@ -2,7 +2,7 @@ import bcrypt
 from prettytable import PrettyTable
 import maskpass
 
-from auxiliares import mensaje_error
+from auxiliares import mensaje_error,nombre_app,version_app
 import negocio as neg
 from auxiliares import (
     validar_rut,
@@ -13,10 +13,12 @@ from auxiliares import (
     validar_contrasena)
 
 
-def solicitar_rut(str_input):
+def solicitar_rut(str_input, opcional=False):
     rut = ''
     while rut == '':
         rut = input(str_input).strip()
+        if opcional and rut == '':
+            return ''
         rut, mensaje = validar_rut(rut)
         print(mensaje)
         if rut != '':
@@ -182,25 +184,54 @@ def modificar_usuario():
         print('Usuario no encontrado.')
         return
 
+    rut = solicitar_rut(
+        'RUT (11.111.111-1) (ENTER para conservar): ', opcional=True)
     nombre = solicitar_dato_opcional(
         'Nombre (ENTER para conservar): ', opcional=True)
     apellido = solicitar_dato_opcional(
         'Apellido (ENTER para conservar): ', opcional=True)
-    correo = solicitar_correo('Correo (ENTER para conservar): ', opcional=True)
+    correo = solicitar_correo(
+        'Correo (ENTER para conservar): ', opcional=True)
     id_pais = solicitar_pais(
         'País (ENTER para conservar): ',
         'Id País (ENTER para conservar): ',
-        opcional=True
-    )
+        opcional=True)
     fecha_nacimiento = solicitar_fecha_nacimiento(
         'Fecha de Nacimiento [dd/mm/aaaa] (ENTER para conservar): ',
-        opcional=True
-    )
+        opcional=True)
     genero = solicitar_genero(
         'Seleccione género [1-3] (ENTER para conservar): ',
-        opcional=True
-    )
+        opcional=True)
 
     neg.modificar_objeto_usuario(
         rut, nombre, apellido, correo, id_pais, fecha_nacimiento, genero, usuario
     )
+
+def eliminar_usuario():
+    titulo = '\nIngrese los datos del Usuario a eliminar'
+    print(titulo)
+    print('=' * len(titulo))
+
+    rut = solicitar_rut('RUT (11.111.111-1): ')
+    usuario = neg.usuario_por_rut(rut)
+    if not usuario:
+        print('Usuario no encontrado.')
+        return
+    else:
+        print(f'¿Está seguro de ELIMINAR al usuario {usuario.rut} {usuario.apellido}, {usuario.nombre}?')
+        opcion = input('Ingrese S/N:')
+        if opcion.lower() == 's':
+            usuario.habilitado = False
+
+            neg.modificar_objeto_usuario(
+                '', '', '', '', '', '', '', usuario
+            )
+        else:
+            return
+
+def login_usuario():
+    print(f'\n{nombre_app} - {version_app}')
+    print(f'{"=" * (len(nombre_app) + len(version_app) + 3)}\n')
+    
+    correo = solicitar_correo('Correo: ')
+    

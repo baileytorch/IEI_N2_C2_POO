@@ -10,7 +10,7 @@ from auxiliares import (
     menu_usuarios,diccionario_menu_usuarios
 )
 from presentacion.presentacion_pais import mostrar_listado_paises, crear_pais, modificar_pais, eliminar_pais
-from presentacion.presentacion_usuario import mostrar_listado_usuarios,crear_usuario,modificar_usuario
+from presentacion.presentacion_usuario import mostrar_listado_usuarios,crear_usuario,modificar_usuario,eliminar_usuario
 
 def mostrar_menu(titulo, opciones):
     print(titulo)
@@ -75,7 +75,7 @@ def cargar_menu_usuarios():
             case '3':
                 modificar_usuario()
             case '4':
-                pass
+                eliminar_usuario()
             case '0':
                 print('Volviendo a Gestión Biblioteca...\n')
                 break
