@@ -28,7 +28,7 @@ def listado_usuarios():
 
 def obtener_usuario_rut(rut_usuario):
     try:
-        usuario = Usuario.select().join(Pais).where(Usuario.rut == rut_usuario).first()
+        usuario = Usuario.select().where(Usuario.rut == rut_usuario).first()
         if usuario:
             return usuario
     except Exception as error:
@@ -36,7 +36,7 @@ def obtener_usuario_rut(rut_usuario):
 
 def obtener_usuario_correo(correo_usuario):
     try:
-        usuario = Usuario.select().join(Pais).where(Usuario.correo == correo_usuario).first()
+        usuario = Usuario.select().where(Usuario.correo == correo_usuario).first()
         if usuario:
             return usuario
     except Exception as error:

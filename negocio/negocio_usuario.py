@@ -3,7 +3,7 @@ from prettytable import PrettyTable
 from datetime import datetime
 import re
 
-from datos.repositorios.repositorio_usuario import listado_usuarios_habilitados, guardar_usuario,obtener_usuario_rut
+from datos import listado_usuarios_habilitados, guardar_usuario,obtener_usuario_rut,obtener_usuario_correo
 from datos.modelos.usuario import Usuario
 from auxiliares import mensaje_error
 
@@ -90,6 +90,14 @@ def deshabilitar_objeto_usuario(usuario: Usuario):
 def usuario_por_rut(rut):
     try:
         usuario = obtener_usuario_rut(rut)
+        if usuario:
+            return usuario
+    except Exception as error:
+        print(f'{mensaje_error}{error}')
+        
+def usuario_por_correo(correo):
+    try:
+        usuario = obtener_usuario_correo(correo)
         if usuario:
             return usuario
     except Exception as error:

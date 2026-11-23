@@ -126,14 +126,15 @@ def solicitar_genero(str_input, opcional=False):
             return genero
 
 
-def solicitar_contrasenia(str_input):
+def solicitar_contrasenia(str_input,crear=False):
     contrasenia = ''
     while contrasenia == '':
-        print('Contraseña Segura: ')
-        print(
-            '- Debe contener al menos una mayúscula\n- Debe contener al menos una minúscula')
-        print('- Debe contener entre 8-15 caracteres\n- Debe contener al menos un dígito')
-        print('- Debe contener al menos un símbolo: !@#$%&/')
+        if crear:
+            print('Contraseña Segura: ')
+            print(
+                '- Debe contener al menos una mayúscula\n- Debe contener al menos una minúscula')
+            print('- Debe contener entre 8-15 caracteres\n- Debe contener al menos un dígito')
+            print('- Debe contener al menos un símbolo: !@#$%&/')
         contrasenia = maskpass.askpass(prompt=str_input, mask='*')
         contrasenia, mensaje = validar_contrasena(contrasenia)
         if len(mensaje) > 0:
@@ -166,7 +167,7 @@ def crear_usuario():
     fecha_nacimiento = solicitar_fecha_nacimiento(
         'Fecha de Nacimiento [dd/mm/aaaa]: ')
     genero = solicitar_genero('Seleccione género [1-3]: ')
-    contrasenia = solicitar_contrasenia('Contraseña: ')
+    contrasenia = solicitar_contrasenia('Contraseña: ',True)
     encriptado = bcrypt.hashpw(contrasenia.encode('utf-8'), bcrypt.gensalt())
 
     neg.crear_objeto_usuario(
@@ -228,10 +229,4 @@ def eliminar_usuario():
             )
         else:
             return
-
-def login_usuario():
-    print(f'\n{nombre_app} - {version_app}')
-    print(f'{"=" * (len(nombre_app) + len(version_app) + 3)}\n')
-    
-    correo = solicitar_correo('Correo: ')
     
